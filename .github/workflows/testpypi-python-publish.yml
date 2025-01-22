@@ -38,7 +38,7 @@ jobs:
           name: release-dists
           path: dist/
 
-  pypi-publish:
+  testpypi-publish:
     runs-on: ubuntu-latest
 
     # Dedicated environments with protections for publishing are strongly recommended.
@@ -51,6 +51,9 @@ jobs:
       # ALTERNATIVE: if your GitHub Release name is the PyPI project version string
       # ALTERNATIVE: exactly, uncomment the following line instead:
       # url: https://pypi.org/project/YOURPROJECT/${{ github.event.release.name }}
+
+    permissions:
+      id-token: write
 
     steps:
       - name: Retrieve release distributions
