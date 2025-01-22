@@ -1,0 +1,26 @@
+<div class="log-entry">
+    <div class="entry-content">
+        <code class="call-line">
+            <div class="primary-line">
+                <span class="timestamp">$timestamp</span> - 
+                <span class="caller">$caller_func</span> → 
+                <span class="function">$function</span>
+            </div>
+            <div class="args-line">
+                <span class="args">args: ($args, $kwargs)</span>
+            </div>
+            <div class="metrics-line">
+                <span class="duration">$duration ms</span>
+                <span class="status-badge $status_class">$status_text</span>
+            </div>
+        </code>
+        <code class="result-line">
+            <span class="result-label">↳ Result:</span>
+            <span class="timestamp">$end_timestamp</span>
+            <span class="result"> return: $result</span>
+        </code>
+        <div class="metadata">
+            Source: $caller_file:$caller_line
+        </div>
+    </div>
+</div>
