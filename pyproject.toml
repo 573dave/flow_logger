@@ -1,3 +1,31 @@
 [build-system]
 requires = ["setuptools>=45", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "flowlogger2"
+version = "0.1.0"
+description = "A lightweight Python function call logger with HTML reporting"
+authors = [
+    {name = "573dave", email = "573dave@github.com"},
+]
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "psutil",
+]
+
+[project.urls]
+Homepage = "https://github.com/573dave/flow_logger"
+
+[tool.setuptools]
+packages = ["flowlogger2"]
+
+[tool.setuptools.package-data]
+flowlogger2 = ["templates/*.html"]
