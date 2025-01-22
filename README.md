@@ -3,6 +3,7 @@
 A lightweight Python function call logger that generates beautiful HTML reports with function call traces, system information, and performance metrics.
 
 ## Features
+- Rapidly diagnose LLM requests or responses
 - Beautiful Material Dark themed HTML reports
 - Function call tracing with arguments and return values
 - System resource monitoring
@@ -27,7 +28,7 @@ result = your_function(2, 3)
 ```
 
 ## Example Output
-
+![Report Screenshot](https://github.com/573dave/flow_logger/blob/main/FlowLogger.png?raw=true)
 
 ## Configuration
 You can disable logging globally:
