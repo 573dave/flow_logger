@@ -12,7 +12,7 @@ A lightweight Python function call logger that generates beautiful HTML reports 
 
 ## Installation
 ```bash
-pip install flow-logger
+pip install flow_logger
 ```
 
 ## Usage
