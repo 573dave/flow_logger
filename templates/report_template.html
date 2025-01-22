@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow Logger Report</title>
+    <style>
+
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent: #bb86fc;
+            --error: #cf6679;
+            --success: #03dac6;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.1;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background-color: var(--bg-secondary);
+            padding: 5px;
+            border-radius: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .title {
+            background-color: var(--bg-secondary);
+            padding: 5px;
+            border-radius: 10px;
+            color: var(--accent);
+            margin: 0 0 10px 0;
+            font-size: 1.3em;
+            padding: 10px;
+            text-align: center
+        }
+        .log-entry {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            padding: 12px 15px;
+        }
+        .entry-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .log-header {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #333;
+        }
+        .log-header:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        .call-line {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .primary-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .args-line {
+            padding-left: 20px;
+            color: #CE9178;
+            word-break: break-word;
+            white-space: normal;
+            line-height: 1.4;
+        }
+        .metrics-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .timestamp {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+        .caller {
+            color: #9B9B9B;
+        }
+        .function {
+            color: #569CD6;
+        }
+        .duration {
+            color: #4EC9B0;
+        }
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+        .success {
+            background-color: rgba(3, 218, 198, 0.1);
+            color: var(--success);
+        }
+        .error {
+            background-color: rgba(207, 102, 121, 0.1);
+            color: var(--error);
+        }
+        .result-line {
+            display: block;  /* Changed from flex */
+            padding: 8px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            word-break: break-word;
+            white-space: normal;
+            line-height: 1.4;
+        }
+        .result-label {
+            color: #9B9B9B;
+            margin-right: 8px;  /* Add some spacing between label and result */
+        }
+        .result {
+            color: #DCDCAA;  /* Soft yellow */
+            display: block;  /* Force result to new line */
+            padding-left: 20px;  /* Match args-line indentation */
+        }
+        .metadata {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            font-family: -apple-system, system-ui, sans-serif;
+            padding-left: 10px;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .args {
+            color: #CE9178;  /* Soft orange */
+        }
+        .system-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            margin-top: 0px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .system-info-section {
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            padding: 10px;
+            line-height: 11px;
+        }
+        .system-info-title {
+            color: var(--accent);
+            margin: 0 0 10px 0;
+            font-size: 1em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 4px;
+        }
+        .system-info-metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .system-info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .system-info-label {
+            color: var(--text-secondary);
+        }
+        .system-info-value {
+            color: var(--text-primary);
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+        }
+        .code {
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background-color: var(--bg-secondary);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .stat-value {
+            font-size: 1.5em;
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            <p class="title">Flow Logger Report - Generated ${timestamp}</p>
+            <p class="title">${filename}</p>
+        </div>
+        <div class="header">
+            <div class="system-info">
+                ${system_info}
+            </div>
+        </div>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">Function Calls: ${total_calls}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">Avg Duration: ${avg_duration}ms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">Error Rate: ${error_rate}%</div>
+            </div>
+        </div>
+        <div id="logEntries">
+            ${log_entries}
+        </div>
+    </div>
+</body>
+</html>
